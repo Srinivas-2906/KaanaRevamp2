@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kāna | Web Design Solutions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.3/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Sora', 'sans-serif'],
+          },
+          colors: {
+            dark: '#050B2E',
+            light: '#F5F5F5',
+            accent: '#00D4FF',
+            'accent-light': '#33DFFF',
+            'accent-dark': '#00A8CC',
+            'accent-secondary': '#9D4EDD',
+            neutral: {
+              100: '#F5F5F5',
+              200: '#E5E5E5',
+              300: '#D4D4D4',
+              400: '#A3A3A3',
+              500: '#737373',
+              600: '#525252',
+              700: '#404040',
+              800: '#262626',
+              900: '#171717',
+              950: '#0A0A0A',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Base Styles */
+    body {
+      overflow-x: hidden;
+      background-color: #050B2E;
+      color: #F5F5F5;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Back Button Styles */
+    .back-button {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+    }
+
+    .back-button:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateX(-5px);
+    }
+
+    .back-button i {
+      font-size: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .back-button:hover i {
+      transform: translateX(-3px);
+    }
+
+    .back-button span {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .back-button {
+        padding: 0.375rem 0.75rem;
+      }
+
+      .back-button span {
+        display: none;
+      }
+    }
+
+    /* Enhanced Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-left.visible,
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scale-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: rgba(5, 11, 46, 0.95);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      transform: translateY(0);
+    }
+
+    .nav.hidden {
+      transform: translateY(-100%);
+    }
+
+    .nav.scrolled {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /* Mobile Menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.98) 0%, rgba(0, 212, 255, 0.1) 100%);
+      backdrop-filter: blur(10px);
+      z-index: 1001;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu a {
+      font-size: 2rem;
+      margin: 1.5rem 0;
+      color: #F5F5F5;
+      transition: all 0.3s ease;
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      text-decoration: none;
+    }
+
+    .mobile-menu.active a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mobile-menu a::before {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #33DFFF);
+      transition: width 0.3s ease;
+    }
+
+    .mobile-menu a:hover::before {
+      width: 100%;
+    }
+
+    /* Close Button */
+    .close-menu {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      opacity: 0;
+      transform: rotate(0deg);
+      transition: all 0.3s ease;
+    }
+
+    .mobile-menu.active .close-menu {
+      opacity: 1;
+      transform: rotate(90deg);
+    }
+
+    .close-menu span {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background-color: #F5F5F5;
+      transition: all 0.3s ease;
+    }
+
+    .close-menu span:first-child {
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .close-menu span:last-child {
+      top: 50%;
+      transform: translateY(-50%) rotate(-45deg);
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      width: 30px;
+      height: 20px;
+      position: relative;
+      cursor: pointer;
+      z-index: 1002;
+    }
+
+    .hamburger span {
+      display: block;
+      position: absolute;
+      height: 2px;
+      width: 100%;
+      background: #F5F5F5;
+      border-radius: 2px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 9px; }
+    .hamburger span:nth-child(3) { top: 18px; }
+
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg);
+      top: 9px;
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg);
+      top: 9px;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999;
+      transform: translateY(20px);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateY(-5px) scale(1.1);
+    }
+
+    /* Hero Section Enhancement */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 5rem;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.85) 0%, rgba(0, 212, 255, 0.1) 100%);
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.35;
+      z-index: 0;
+      filter: blur(0.5px);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.75) 0%, rgba(0, 212, 255, 0.15) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 4xl;
+      margin: 0 auto;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #F5F5F5 0%, #00D4FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Feature Cards Enhancement */
+    .feature-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .feature-icon {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      overflow: hidden;
+    }
+
+    .feature-icon::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon::before {
+      opacity: 1;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Section Spacing */
+    section {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Stats Section Enhancement */
+    .stats-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stats-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(0, 212, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .stats-card:hover::after {
+      opacity: 1;
+    }
+
+    .stats-number {
+      font-size: 3.5rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .stats-number::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #33DFFF);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stats-card:hover .stats-number::after {
+      transform: scaleX(1);
+    }
+
+    /* Benefits Section Enhancement */
+    .benefits-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .benefits-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: 0;
+      filter: blur(1px);
+    }
+
+    .benefits-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.98) 0%, rgba(0, 212, 255, 0.05) 100%);
+      z-index: 1;
+    }
+
+    .benefits-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Enhanced Benefits Cards */
+    .benefits-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .benefits-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .benefits-card:hover::before {
+      opacity: 1;
+    }
+
+    .benefits-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .benefits-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .benefits-card i {
+      font-size: 1.75rem;
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.3s ease;
+    }
+
+    .benefits-card:hover i {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Services Section Enhancement */
+    .services-section {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.98) 0%, rgba(0, 212, 255, 0.1) 100%);
+    }
+
+    .services-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: 0;
+      filter: blur(1px);
+    }
+
+    .services-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .services-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #F5F5F5 0%, #00D4FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Enhanced Services Cards */
+    .services-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .services-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .services-card:hover::before {
+      opacity: 1;
+    }
+
+    .services-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .services-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .services-card i {
+      font-size: 1.75rem;
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.3s ease;
+    }
+
+    .services-card:hover i {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* CTA Section Enhancement */
+    .cta-section {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.98) 0%, rgba(0, 212, 255, 0.1) 100%);
+    }
+
+    .cta-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: 0;
+      filter: blur(1px);
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #F5F5F5 0%, #00D4FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .hamburger {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .mobile-menu.active {
+        right: 0;
+      }
+
+      .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg);
+        top: 9px;
+      }
+
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg);
+        top: 9px;
+      }
+
+      .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .hero-section {
+        padding-top: 6rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-swiper {
+        width: 100%;
+        height: 300px;
+        margin: 0 auto;
+      }
+
+      .feature-swiper .swiper-slide {
+        width: 100%;
+        height: 100%;
+      }
+
+      .feature-swiper .swiper-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .stats-card {
+        padding: 1.5rem;
+      }
+
+      .stats-number {
+        font-size: 2.5rem;
+      }
+
+      .benefits-section {
+        padding: 4rem 0;
+      }
+
+      .services-section {
+        padding: 4rem 0;
+      }
+    }
+
+    /* Swiper Styles */
+    .feature-swiper {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+
+    .feature-swiper .swiper-wrapper {
+      width: 100%;
+      height: 100%;
+    }
+
+    .feature-swiper .swiper-slide {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-swiper .swiper-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .feature-swiper .swiper-button-next,
+    .feature-swiper .swiper-button-prev {
+      color: #00D4FF;
+      background: rgba(5, 11, 46, 0.8);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .feature-swiper .swiper-button-next,
+      .feature-swiper .swiper-button-prev {
+        display: flex;
+      }
+    }
+
+    .feature-swiper .swiper-button-next:after,
+    .feature-swiper .swiper-button-prev:after {
+      font-size: 1.2rem;
+    }
+
+    .feature-swiper .swiper-button-next:hover,
+    .feature-swiper .swiper-button-prev:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    .feature-swiper .swiper-pagination {
+      bottom: 1rem;
+      z-index: 10;
+    }
+
+    .feature-swiper .swiper-pagination-bullet {
+      background: #00D4FF;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+      width: 8px;
+      height: 8px;
+    }
+
+    .feature-swiper .swiper-pagination-bullet-active {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 767px) {
+      .feature-swiper {
+        aspect-ratio: 16/9;
+        max-height: 300px;
+      }
+      
+      .feature-swiper .swiper-slide {
+        height: 100%;
+      }
+
+      .feature-swiper .swiper-slide img {
+        object-position: center;
+        height: 100%;
+      }
+
+      .feature-swiper .swiper-pagination {
+        bottom: 0.5rem;
+      }
+
+      .feature-swiper .swiper-pagination-bullet {
+        width: 6px;
+        height: 6px;
+      }
+    }
+
+    /* Features Section */
+    .features-section {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      padding: 4rem 0;
+    }
+
+    .features-container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (min-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+      }
+    }
+
+    .features-content {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .feature-swiper-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      border-radius: 1rem;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    /* Enhanced Button Styles */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      color: #050B2E;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #00D4FF;
+      color: #00D4FF;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 212, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Design Showcase Section */
+    .design-principle {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .design-principle:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .design-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .design-principle:hover .design-icon {
+      background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .design-preview {
+      position: relative;
+      overflow: hidden;
+      border-radius: 0.5rem;
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    .design-preview img {
+      transition: transform 0.5s ease;
+    }
+
+    .design-principle:hover .design-preview img {
+      transform: scale(1.05);
+    }
+
+    .design-preview::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 0%, rgba(5, 11, 46, 0.8) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .design-principle:hover .design-preview::after {
+      opacity: 1;
+    }
+
+    /* Process Section */
+    .process-step {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .process-step:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .process-step::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .process-step:hover::before {
+      opacity: 1;
+    }
+
+    .process-step .w-12 {
+      transition: all 0.3s ease;
+    }
+
+    .process-step:hover .w-12 {
+      background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .design-principle {
+        margin-bottom: 2rem;
+      }
+
+      .design-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .design-preview img {
+        height: 40vh;
+      }
+    }
+  </style>
+</head>
+<body class="bg-dark text-light">
+  <!-- Header -->
+  <header class="w-full py-6">
+    <div class="container mx-auto px-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <a href="../index.html#solutions" class="back-button">
+            <i class="fas fa-arrow-left text-accent"></i>
+            <span class="text-accent ml-2">Back to Solutions</span>
+          </a>
+          <a href="../index.html" class="text-xl font-display font-medium link-trigger">
+            Kāna<span class="text-accent">.</span>
+          </a>
+        </div>
+
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="../index.html" class="text-sm hover-line nav-link link-trigger">Home</a>
+          <a href="../index.html#solutions" class="text-sm hover-line nav-link link-trigger">Solutions</a>
+          <a href="../index.html#process" class="text-sm hover-line nav-link link-trigger">Process</a>
+          <a href="../index.html#work" class="text-sm hover-line nav-link link-trigger">Work</a>
+          <a href="../index.html#about" class="text-sm hover-line nav-link link-trigger">About</a>
+          <a href="../index.html#contact" class="text-sm hover-line nav-link link-trigger">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+          <a href="../index.html#contact" class="hidden md:inline-flex btn btn-outline text-sm link-trigger">
+            Get in touch
+          </a>
+
+          <button class="hamburger md:hidden" id="menuButton">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="close-menu" id="closeMenu">
+      <span></span>
+      <span></span>
+    </div>
+    <nav class="flex flex-col items-center gap-8">
+      <a href="../index.html" class="text-3xl font-display font-medium hover:text-accent transition-colors mobile-nav-link link-trigger">Home</a>
+      <a href="../index.html#solutions" class="text-3xl font-display font-medium hover:text-accent transition-colors mobile-nav-link link-trigger">Solutions</a>
+      <a href="../index.html#process" class="text-3xl font-display font-medium hover:text-accent transition-colors mobile-nav-link link-trigger">Process</a>
+      <a href="../index.html#work" class="text-3xl font-display font-medium hover:text-accent transition-colors mobile-nav-link link-trigger">Work</a>
+      <a href="../index.html#about" class="text-3xl font-display font-medium hover:text-accent transition-colors mobile-nav-link link-trigger">About</a>
+      <a href="../index.html#contact" class="text-3xl font-display font-medium hover:text-accent transition-colors mobile-nav-link link-trigger">Contact</a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center pt-20">
+      <!-- Background Image -->
+      <div class="hero-bg"></div>
+      <!-- Overlay -->
+      <div class="hero-overlay"></div>
+      <!-- Content -->
+      <div class="container mx-auto px-6 relative z-10">
+        <div class="max-w-4xl">
+          <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Web Design</span>
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-medium leading-tight mb-6 reveal-up" style="transition-delay: 0.1s">
+            Crafting digital experiences<br>that make an impact
+          </h1>
+          <p class="text-lg md:text-xl text-neutral-400 mb-8 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+            We transform your vision into stunning, user-friendly websites that combine beautiful design with powerful functionality.
+          </p>
+          <div class="flex flex-wrap gap-4 reveal-up" style="transition-delay: 0.3s">
+            <a href="#features" class="btn btn-primary link-trigger">
+              View Our Work
+              <i class="fas fa-arrow-right text-xs ml-2 btn-icon"></i>
+            </a>
+            <a href="../index.html#contact" class="btn btn-outline link-trigger">
+              Start Your Project
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 md:py-32 bg-dark/80">
+      <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Stat 1 -->
+          <div class="stats-card reveal-up">
+            <div class="stats-number">2.5s</div>
+            <p class="text-neutral-400">Average page load time</p>
+          </div>
+          
+          <!-- Stat 2 -->
+          <div class="stats-card reveal-up" style="transition-delay: 0.1s">
+            <div class="stats-number">150+</div>
+            <p class="text-neutral-400">Websites designed & launched</p>
+          </div>
+          
+          <!-- Stat 3 -->
+          <div class="stats-card reveal-up" style="transition-delay: 0.2s">
+            <div class="stats-number">99%</div>
+            <p class="text-neutral-400">Mobile responsiveness rate</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Design Showcase Section -->
+    <section class="py-20 md:py-32 bg-dark/80">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mb-16">
+          <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Design Showcase</span>
+          <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+            Our Design Philosophy
+          </h2>
+          <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+            We believe in creating designs that are not just visually appealing but also functional and user-friendly.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Design Principle 1 -->
+          <div class="design-principle p-8 card-hover stagger-item">
+            <div class="flex items-start gap-6">
+              <div class="design-icon">
+                <i class="fas fa-paint-brush text-2xl text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-display font-medium mb-3">Minimalist Design</h3>
+                <p class="text-neutral-400 mb-4">
+                  Clean, uncluttered layouts that focus on content and user experience.
+                </p>
+                <div class="design-preview rounded-lg overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                       alt="Minimalist Design" 
+                       class="w-full h-48 object-cover">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Design Principle 2 -->
+          <div class="design-principle p-8 card-hover stagger-item">
+            <div class="flex items-start gap-6">
+              <div class="design-icon">
+                <i class="fas fa-palette text-2xl text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-display font-medium mb-3">Color Theory</h3>
+                <p class="text-neutral-400 mb-4">
+                  Strategic use of color to create visual hierarchy and emotional impact.
+                </p>
+                <div class="design-preview rounded-lg overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                       alt="Color Theory" 
+                       class="w-full h-48 object-cover">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Design Principle 3 -->
+          <div class="design-principle p-8 card-hover stagger-item">
+            <div class="flex items-start gap-6">
+              <div class="design-icon">
+                <i class="fas fa-font text-2xl text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-display font-medium mb-3">Typography</h3>
+                <p class="text-neutral-400 mb-4">
+                  Carefully selected fonts that enhance readability and brand identity.
+                </p>
+                <div class="design-preview rounded-lg overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                       alt="Typography" 
+                       class="w-full h-48 object-cover">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Design Principle 4 -->
+          <div class="design-principle p-8 card-hover stagger-item">
+            <div class="flex items-start gap-6">
+              <div class="design-icon">
+                <i class="fas fa-mouse-pointer text-2xl text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-display font-medium mb-3">User Experience</h3>
+                <p class="text-neutral-400 mb-4">
+                  Intuitive navigation and interactions that guide users through your site.
+                </p>
+                <div class="design-preview rounded-lg overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                       alt="User Experience" 
+                       class="w-full h-48 object-cover">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 md:py-32">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mb-16">
+          <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Key Features</span>
+          <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+            Modern web design solutions
+          </h2>
+          <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+            We combine cutting-edge design trends with powerful functionality to create websites that stand out.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Feature 1 -->
+          <div class="feature-card p-8 card-hover stagger-item">
+            <div class="feature-icon mb-6">
+              <i class="fas fa-paint-brush text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Modern UI Design</h3>
+            <p class="text-neutral-400 mb-6">
+              Sleek, contemporary designs that follow the latest web design trends and best practices.
+            </p>
+            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+              Learn more
+              <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
+            </a>
+          </div>
+          
+          <!-- Feature 2 -->
+          <div class="feature-card p-8 card-hover stagger-item">
+            <div class="feature-icon mb-6">
+              <i class="fas fa-mobile-alt text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Responsive Design</h3>
+            <p class="text-neutral-400 mb-6">
+              Perfect viewing experience across all devices, from desktop to mobile and tablet.
+            </p>
+            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+              Learn more
+              <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
+            </a>
+          </div>
+          
+          <!-- Feature 3 -->
+          <div class="feature-card p-8 card-hover stagger-item">
+            <div class="feature-icon mb-6">
+              <i class="fas fa-code text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Clean Code</h3>
+            <p class="text-neutral-400 mb-6">
+              Optimized, semantic HTML and CSS that ensures fast loading and easy maintenance.
+            </p>
+            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+              Learn more
+              <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
+            </a>
+          </div>
+          
+          <!-- Feature 4 -->
+          <div class="feature-card p-8 card-hover stagger-item">
+            <div class="feature-icon mb-6">
+              <i class="fas fa-search text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">SEO-Friendly</h3>
+            <p class="text-neutral-400 mb-6">
+              Built with SEO best practices to help your website rank higher in search results.
+            </p>
+            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+              Learn more
+              <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Swiper -->
+    <section class="py-20 md:py-32 bg-dark/80">
+      <div class="container mx-auto px-6">
+        <div class="swiper feature-swiper">
+          <div class="swiper-wrapper">
+            <!-- Slide 1 -->
+            <div class="swiper-slide">
+              <div class="relative aspect-[16/9] rounded-sm overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Responsive Design" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-70"></div>
+                <div class="absolute bottom-0 left-0 p-6">
+                  <h3 class="text-2xl font-display font-medium mb-2">Responsive Design</h3>
+                  <p class="text-neutral-400">Perfect viewing experience across all devices</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="swiper-slide">
+              <div class="relative aspect-[16/9] rounded-sm overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Custom Design" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-70"></div>
+                <div class="absolute bottom-0 left-0 p-6">
+                  <h3 class="text-2xl font-display font-medium mb-2">Custom Design</h3>
+                  <p class="text-neutral-400">Unique designs that reflect your brand</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="swiper-slide">
+              <div class="relative aspect-[16/9] rounded-sm overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Performance Optimization" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-70"></div>
+                <div class="absolute bottom-0 left-0 p-6">
+                  <h3 class="text-2xl font-display font-medium mb-2">Performance Optimization</h3>
+                  <p class="text-neutral-400">Fast-loading websites for better user experience</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Slide 4 -->
+            <div class="swiper-slide">
+              <div class="relative aspect-[16/9] rounded-sm overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="SEO Integration" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-70"></div>
+                <div class="absolute bottom-0 left-0 p-6">
+                  <h3 class="text-2xl font-display font-medium mb-2">SEO Integration</h3>
+                  <p class="text-neutral-400">Optimized for search engine visibility</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="swiper-pagination"></div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-20 md:py-32">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mb-16">
+          <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Benefits</span>
+          <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+            Why invest in professional web design?
+          </h2>
+          <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+            A well-designed website is crucial for your business success in today's digital world.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Benefit 1 -->
+          <div class="benefits-card p-8 card-hover stagger-item">
+            <div class="benefits-icon mb-6">
+              <i class="fas fa-user-check text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Enhanced User Experience</h3>
+            <p class="text-neutral-400 mb-6">
+              Intuitive navigation and engaging interfaces that keep visitors on your site longer.
+            </p>
+          </div>
+          
+          <!-- Benefit 2 -->
+          <div class="benefits-card p-8 card-hover stagger-item">
+            <div class="benefits-icon mb-6">
+              <i class="fas fa-mobile-alt text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Mobile-First Approach</h3>
+            <p class="text-neutral-400 mb-6">
+              Optimized for mobile devices where most users browse the web today.
+            </p>
+          </div>
+          
+          <!-- Benefit 3 -->
+          <div class="benefits-card p-8 card-hover stagger-item">
+            <div class="benefits-icon mb-6">
+              <i class="fas fa-bolt text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Fast Loading Speed</h3>
+            <p class="text-neutral-400 mb-6">
+              Optimized performance that keeps your site running smoothly and efficiently.
+            </p>
+          </div>
+          
+          <!-- Benefit 4 -->
+          <div class="benefits-card p-8 card-hover stagger-item">
+            <div class="benefits-icon mb-6">
+              <i class="fas fa-paint-brush text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Brand Consistency</h3>
+            <p class="text-neutral-400 mb-6">
+              Designs that perfectly align with your brand identity and values.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-20 md:py-32 bg-dark/80">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mb-16">
+          <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Our Services</span>
+          <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+            Comprehensive web design solutions
+          </h2>
+          <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+            From concept to launch, we provide end-to-end web design services tailored to your needs.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Service 1 -->
+          <div class="services-card p-8 card-hover stagger-item">
+            <div class="services-icon mb-6">
+              <i class="fas fa-pencil-ruler text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">UI/UX Design</h3>
+            <p class="text-neutral-400 mb-6">
+              Intuitive and visually appealing interfaces that enhance user experience and engagement.
+            </p>
+          </div>
+          
+          <!-- Service 2 -->
+          <div class="services-card p-8 card-hover stagger-item">
+            <div class="services-icon mb-6">
+              <i class="fas fa-code text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Web Development</h3>
+            <p class="text-neutral-400 mb-6">
+              Clean, efficient code that ensures fast loading times and smooth functionality.
+            </p>
+          </div>
+          
+          <!-- Service 3 -->
+          <div class="services-card p-8 card-hover stagger-item">
+            <div class="services-icon mb-6">
+              <i class="fas fa-search text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">SEO Optimization</h3>
+            <p class="text-neutral-400 mb-6">
+              Built-in SEO features to improve your website's visibility in search results.
+            </p>
+          </div>
+          
+          <!-- Service 4 -->
+          <div class="services-card p-8 card-hover stagger-item">
+            <div class="services-icon mb-6">
+              <i class="fas fa-tools text-2xl text-accent"></i>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Maintenance & Support</h3>
+            <p class="text-neutral-400 mb-6">
+              Ongoing support and maintenance to keep your website running smoothly.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="py-20 md:py-32 bg-dark/80">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mb-16">
+          <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Our Process</span>
+          <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+            How We Create Your Website
+          </h2>
+          <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+            Our proven process ensures a smooth journey from concept to launch.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Step 1 -->
+          <div class="process-step p-6 card-hover stagger-item">
+            <div class="relative">
+              <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+                <span class="text-accent font-display font-medium">01</span>
+              </div>
+              <h3 class="text-xl font-display font-medium mb-3">Discovery</h3>
+              <p class="text-neutral-400">
+                We dive deep into your brand, goals, and target audience to create a solid foundation.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="process-step p-6 card-hover stagger-item">
+            <div class="relative">
+              <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+                <span class="text-accent font-display font-medium">02</span>
+              </div>
+              <h3 class="text-xl font-display font-medium mb-3">Design</h3>
+              <p class="text-neutral-400">
+                Creating beautiful, user-friendly designs that align with your brand identity.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="process-step p-6 card-hover stagger-item">
+            <div class="relative">
+              <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+                <span class="text-accent font-display font-medium">03</span>
+              </div>
+              <h3 class="text-xl font-display font-medium mb-3">Development</h3>
+              <p class="text-neutral-400">
+                Building your website with clean, efficient code and modern technologies.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="process-step p-6 card-hover stagger-item">
+            <div class="relative">
+              <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+                <span class="text-accent font-display font-medium">04</span>
+              </div>
+              <h3 class="text-xl font-display font-medium mb-3">Launch</h3>
+              <p class="text-neutral-400">
+                Thorough testing and smooth deployment to ensure everything works perfectly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 md:py-32">
+      <div class="container mx-auto px-6">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up">
+            Ready to create your dream website?
+          </h2>
+          <p class="text-neutral-400 mb-8 max-w-2xl mx-auto reveal-up" style="transition-delay: 0.1s">
+            Let's design a website that not only looks amazing but also drives results for your business.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4 reveal-up" style="transition-delay: 0.2s">
+            <a href="../index.html#contact" class="btn btn-primary link-trigger">
+              Start Your Project
+              <i class="fas fa-arrow-right text-xs ml-2 btn-icon"></i>
+            </a>
+            <a href="../index.html#work" class="btn btn-outline link-trigger">
+              View Portfolio
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-12 border-t border-neutral-800">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="text-center md:text-left">
+          <a href="../index.html" class="text-xl font-display font-medium link-trigger">
+            Kāna<span class="text-accent">.</span>
+          </a>
+          <p class="text-neutral-400 mt-4 max-w-md">
+            Creating innovative digital solutions for businesses worldwide.
+          </p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Initialize Swiper
+    const featureSwiper = new Swiper('.feature-swiper', {
+      slidesPerView: 1,
+      spaceBetween: 30,
+      loop: true,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      breakpoints: {
+        768: {
+          slidesPerView: 2,
+        },
+        1024: {
+          slidesPerView: 3,
+        },
+      },
+    });
+
+    // Mobile Menu
+    const menuButton = document.getElementById('menuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const closeMenu = document.getElementById('closeMenu');
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+    menuButton.addEventListener('click', () => {
+      menuButton.classList.add('active');
+      mobileMenu.classList.add('active');
+      document.body.classList.add('overflow-hidden');
+    });
+
+    closeMenu.addEventListener('click', () => {
+      menuButton.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      document.body.classList.remove('overflow-hidden');
+    });
+
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        menuButton.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.classList.remove('overflow-hidden');
+      });
+    });
+
+    // Back to Top Button
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Reveal on Scroll
+    const revealElements = document.querySelectorAll('.reveal-up');
+
+    const revealOnScroll = () => {
+      revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+
+        if (elementTop < window.innerHeight - elementVisible) {
+          element.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // Stagger Animation
+    const staggerItems = document.querySelectorAll('.stagger-item');
+
+    const staggerAnimation = () => {
+      staggerItems.forEach((item, index) => {
+        item.style.transitionDelay = `${index * 0.1}s`;
+        if (item.getBoundingClientRect().top < window.innerHeight - 150) {
+          item.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', staggerAnimation);
+    staggerAnimation();
+  </script>
+</body>
+</html>

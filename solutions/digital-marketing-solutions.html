@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kāna | Digital Marketing Solutions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.3/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Sora', 'sans-serif'],
+          },
+          colors: {
+            dark: '#050B2E',
+            light: '#F5F5F5',
+            accent: '#00D4FF',
+            'accent-light': '#33DFFF',
+            'accent-dark': '#00A8CC',
+            'accent-secondary': '#9D4EDD',
+            neutral: {
+              100: '#F5F5F5',
+              200: '#E5E5E5',
+              300: '#D4D4D4',
+              400: '#A3A3A3',
+              500: '#737373',
+              600: '#525252',
+              700: '#404040',
+              800: '#262626',
+              900: '#171717',
+              950: '#0A0A0A',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Base Styles */
+    body {
+      overflow-x: hidden;
+      background-color: #050B2E;
+      color: #F5F5F5;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Hamburger Menu */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      cursor: pointer;
+      padding: 10px;
+      z-index: 1001;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #F5F5F5;
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      height: 100vh;
+      background: rgba(5, 11, 46, 0.98);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .close-menu {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .close-menu span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #F5F5F5;
+      margin: 6px 0;
+      transition: all 0.3s ease;
+    }
+
+    .close-menu span:first-child {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .close-menu span:last-child {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    .mobile-menu-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .mobile-menu-link {
+      color: #F5F5F5;
+      text-decoration: none;
+      font-size: 1.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .mobile-menu-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #33DFFF);
+      transition: width 0.3s ease;
+    }
+
+    .mobile-menu-link:hover::after {
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(5, 11, 46, 0.95);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 4rem;
+      padding: 4rem 0;
+    }
+
+    .footer-section h3 {
+      color: #F5F5F5;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-link {
+      color: #F5F5F5;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+
+    .footer-link:hover {
+      opacity: 1;
+      transform: translateX(5px);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .social-link {
+      color: #F5F5F5;
+      font-size: 1.25rem;
+      transition: all 0.3s ease;
+      opacity: 0.8;
+    }
+
+    .social-link:hover {
+      opacity: 1;
+      transform: translateY(-3px);
+      color: #00D4FF;
+    }
+
+    .footer-bottom {
+      padding: 2rem 0;
+      border-top: 1px solid rgba(0, 212, 255, 0.1);
+      text-align: center;
+      color: #F5F5F5;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+      }
+
+      .footer-links {
+        align-items: center;
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+    }
+
+    /* Enhanced Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-left.visible,
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scale-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      color: #050B2E;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-outline {
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      color: #00D4FF;
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 212, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Card Styles */
+    .card {
+      background: rgba(5, 11, 46, 0.5);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .card-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-icon i {
+      font-size: 1.5rem;
+      color: #00D4FF;
+    }
+
+    /* Section Styles */
+    .section {
+      padding: 6rem 0;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.98) 0%, rgba(0, 212, 255, 0.05) 100%);
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #F5F5F5 0%, #00D4FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-description {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.6;
+      color: #F5F5F5;
+      opacity: 0.8;
+      margin-bottom: 2rem;
+      max-width: 2xl;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 4rem 0;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+
+      .card-icon {
+        width: 50px;
+        height: 50px;
+      }
+
+      .card-icon i {
+        font-size: 1.25rem;
+      }
+    }
+
+    /* Navigation Styles */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: rgba(5, 11, 46, 0.95);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      transform: translateY(0);
+    }
+
+    .nav.hidden {
+      transform: translateY(-100%);
+    }
+
+    .nav.scrolled {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .nav-link {
+      color: #F5F5F5;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #33DFFF);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding-top: 5rem;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.95) 0%, rgba(0, 212, 255, 0.1) 100%);
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1557838923-2985c318be48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.15;
+      z-index: 0;
+      filter: blur(1px);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.95) 0%, rgba(0, 212, 255, 0.1) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 4xl;
+      margin: 0 auto;
+      padding: 0 2rem;
+      text-align: left;
+      width: 100%;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #F5F5F5 0%, #00D4FF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: left;
+      width: 100%;
+    }
+
+    .hero-description {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.6;
+      color: #F5F5F5;
+      opacity: 0.8;
+      margin-bottom: 2rem;
+      max-width: 2xl;
+      text-align: left;
+      width: 100%;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .hero-content {
+        text-align: center;
+      }
+
+      .hero-title,
+      .hero-description {
+        text-align: center;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+    }
+
+    /* Stats Section Enhancement */
+    .stats-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(0, 212, 255, 0.05);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stats-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top right, rgba(0, 212, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .stats-card:hover::after {
+      opacity: 1;
+    }
+
+    .stats-number {
+      font-size: 3.5rem;
+      font-weight: bold;
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .stats-number::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #33DFFF);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stats-card:hover .stats-number::after {
+      transform: scaleX(1);
+    }
+
+    /* Benefits Section Enhancement */
+    .benefits-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .benefits-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.1;
+      z-index: 0;
+      filter: blur(1px);
+    }
+
+    .benefits-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(5, 11, 46, 0.98) 0%, rgba(0, 212, 255, 0.05) 100%);
+      z-index: 1;
+    }
+
+    .benefits-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Enhanced Benefits Cards */
+    .benefits-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .benefits-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .benefits-card:hover::before {
+      opacity: 1;
+    }
+
+    .benefits-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .benefits-icon {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 16px;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .benefits-card i {
+      font-size: 1.75rem;
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: transform 0.3s ease;
+    }
+
+    .benefits-card:hover i {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Process Section Enhancement */
+    .process-step {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .process-step:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .process-step::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .process-step:hover::before {
+      opacity: 1;
+    }
+
+    .process-step .w-12 {
+      transition: all 0.3s ease;
+    }
+
+    .process-step:hover .w-12 {
+      background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.1);
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999;
+      transform: translateY(20px);
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      background: rgba(0, 212, 255, 0.2);
+      transform: translateY(-5px) scale(1.1);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .benefits-card {
+        margin-bottom: 2rem;
+      }
+
+      .benefits-icon {
+        width: 48px;
+        height: 48px;
+      }
+
+      .benefits-card i {
+        font-size: 1.5rem;
+      }
+
+      .process-step {
+        margin-bottom: 2rem;
+      }
+
+      .process-step .w-12 {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav py-4">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center">
+        <a href="/" class="text-2xl font-display font-bold text-white hover:text-accent transition-colors">
+          Kāna
+        </a>
+        <div class="nav-links">
+          <div class="nav-menu">
+            <a href="../index.html" class="nav-link">Home</a>
+            <a href="../index.html#solutions" class="nav-link">Solutions</a>
+            <a href="../solutions/web-design.html" class="nav-link">Web Design</a>
+            <a href="../index.html#about" class="nav-link">About</a>
+            <a href="../index.html#contact" class="nav-link">Contact</a>
+          </div>
+          <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <div class="close-menu">
+      <span></span>
+      <span></span>
+    </div>
+    <div class="mobile-menu-content">
+      <a href="../index.html" class="mobile-menu-link">Home</a>
+      <a href="../index.html#solutions" class="mobile-menu-link">Solutions</a>
+      <a href="../solutions/web-design.html" class="mobile-menu-link">Web Design</a>
+      <a href="../index.html#about" class="mobile-menu-link">About</a>
+      <a href="../index.html#contact" class="mobile-menu-link">Contact</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="container mx-auto px-4">
+      <div class="hero-content">
+        <h1 class="hero-title">Digital Marketing Solutions</h1>
+        <p class="hero-description">Transform your online presence with our comprehensive digital marketing strategies that drive growth, engagement, and measurable results.</p>
+        <div class="hero-buttons">
+          <a href="../index.html#contact" class="btn btn-primary">Get Started</a>
+          <a href="#services" class="btn btn-outline">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="section" id="services">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center mb-16">
+        <h2 class="section-title">Our Digital Marketing Services</h2>
+        <p class="section-description">Comprehensive digital marketing solutions to help your business grow and succeed in the digital age.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card fade-in">
+          <div class="card-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4">Search Engine Optimization</h3>
+          <p class="text-neutral-300">Improve your website's visibility and ranking in search results with our proven SEO strategies.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay: 0.2s">
+          <div class="card-icon">
+            <i class="fas fa-ad"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4">Pay-Per-Click Advertising</h3>
+          <p class="text-neutral-300">Strategic PPC campaigns on Google, Bing, and social media platforms to drive targeted traffic.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay: 0.4s">
+          <div class="card-icon">
+            <i class="fas fa-share-alt"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4">Social Media Marketing</h3>
+          <p class="text-neutral-300">Engage your audience and build brand awareness across all major social media platforms.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay: 0.6s">
+          <div class="card-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4">Email Marketing</h3>
+          <p class="text-neutral-300">Create compelling email campaigns that nurture leads and drive conversions.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay: 0.8s">
+          <div class="card-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4">Content Marketing</h3>
+          <p class="text-neutral-300">High-quality content creation and distribution to establish your brand as an industry authority.</p>
+        </div>
+        <div class="card fade-in" style="transition-delay: 1s">
+          <div class="card-icon">
+            <i class="fas fa-bullhorn"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-4">Digital PR</h3>
+          <p class="text-neutral-300">Strategic public relations campaigns to enhance your brand's online reputation and visibility.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 bg-neutral-900">
+    <div class="container mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="stats-card fade-in">
+          <div class="stats-number">200%</div>
+          <p class="text-neutral-300">Average ROI Increase</p>
+        </div>
+        <div class="stats-card fade-in" style="transition-delay: 0.2s">
+          <div class="stats-number">500+</div>
+          <p class="text-neutral-300">Campaigns Managed</p>
+        </div>
+        <div class="stats-card fade-in" style="transition-delay: 0.4s">
+          <div class="stats-number">98%</div>
+          <p class="text-neutral-300">Client Satisfaction</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="py-20 md:py-32">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mb-16">
+        <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Benefits</span>
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+          Why invest in digital marketing?
+        </h2>
+        <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+          Digital marketing is essential for modern business success. Here's why it matters.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Benefit 1 -->
+        <div class="benefits-card p-8 card-hover stagger-item">
+          <div class="benefits-icon mb-6">
+            <i class="fas fa-chart-bar text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-3">Measurable Results</h3>
+          <p class="text-neutral-400 mb-6">
+            Track and analyze every aspect of your marketing campaigns with detailed analytics and reporting.
+          </p>
+        </div>
+        
+        <!-- Benefit 2 -->
+        <div class="benefits-card p-8 card-hover stagger-item">
+          <div class="benefits-icon mb-6">
+            <i class="fas fa-bullseye text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-3">Targeted Reach</h3>
+          <p class="text-neutral-400 mb-6">
+            Reach your ideal customers with precision targeting and personalized messaging.
+          </p>
+        </div>
+        
+        <!-- Benefit 3 -->
+        <div class="benefits-card p-8 card-hover stagger-item">
+          <div class="benefits-icon mb-6">
+            <i class="fas fa-hand-holding-usd text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-3">Cost-Effective</h3>
+          <p class="text-neutral-400 mb-6">
+            Maximize your marketing budget with data-driven strategies and optimized campaigns.
+          </p>
+        </div>
+        
+        <!-- Benefit 4 -->
+        <div class="benefits-card p-8 card-hover stagger-item">
+          <div class="benefits-icon mb-6">
+            <i class="fas fa-globe text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-3">Global Reach</h3>
+          <p class="text-neutral-400 mb-6">
+            Expand your business reach to a global audience through digital channels.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="py-20 md:py-32 bg-dark/80">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mb-16">
+        <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Our Process</span>
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+          Our Digital Marketing Approach
+        </h2>
+        <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+          A systematic approach to delivering exceptional digital marketing results.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Step 1 -->
+        <div class="process-step p-6 card-hover stagger-item">
+          <div class="relative">
+            <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+              <span class="text-accent font-display font-medium">01</span>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Research</h3>
+            <p class="text-neutral-400">
+              Deep dive into your market, competitors, and target audience to inform strategy.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="process-step p-6 card-hover stagger-item">
+          <div class="relative">
+            <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+              <span class="text-accent font-display font-medium">02</span>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Strategy</h3>
+            <p class="text-neutral-400">
+              Develop comprehensive marketing strategies aligned with your business goals.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="process-step p-6 card-hover stagger-item">
+          <div class="relative">
+            <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+              <span class="text-accent font-display font-medium">03</span>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Implementation</h3>
+            <p class="text-neutral-400">
+              Execute campaigns across multiple channels with precision and expertise.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="process-step p-6 card-hover stagger-item">
+          <div class="relative">
+            <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mb-4">
+              <span class="text-accent font-display font-medium">04</span>
+            </div>
+            <h3 class="text-xl font-display font-medium mb-3">Optimization</h3>
+            <p class="text-neutral-400">
+              Continuously monitor, analyze, and optimize campaigns for maximum ROI.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 md:py-32">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up">
+          Ready to grow your digital presence?
+        </h2>
+        <p class="text-neutral-400 mb-8 max-w-2xl mx-auto reveal-up" style="transition-delay: 0.1s">
+          Let's create a digital marketing strategy that drives real results for your business.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 reveal-up" style="transition-delay: 0.2s">
+          <a href="../index.html#contact" class="btn btn-primary">
+            Start Your Campaign
+            <i class="fas fa-arrow-right text-xs ml-2"></i>
+          </a>
+          <a href="#services" class="btn btn-outline">
+            View Services
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Footer -->
+<footer class="py-12 border-t border-neutral-800">
+  <div class="container mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+      <div class="text-center md:text-left">
+        <a href="../index.html" class="text-xl font-display font-medium link-trigger">
+          Kāna<span class="text-accent">.</span>
+        </a>
+        <p class="text-neutral-400 mt-4 max-w-md">
+          Creating innovative digital solutions for businesses worldwide.
+        </p>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+          <i class="fab fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="backToTop">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Initialize GSAP
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Navigation
+    const nav = document.querySelector('.nav');
+    const hamburger = document.querySelector('.hamburger');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const closeMenu = document.querySelector('.close-menu');
+
+    // Scroll handler
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile menu handlers
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    closeMenu.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      mobileMenu.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (mobileMenu.classList.contains('active') && 
+          !mobileMenu.contains(e.target) && 
+          !hamburger.contains(e.target)) {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // Initialize animations on load
+    window.addEventListener('load', () => {
+      // Force visibility of key sections
+      document.querySelectorAll('.card, .stats-card').forEach(card => {
+        card.classList.add('visible');
+      });
+
+      // Animate hero section
+      gsap.from('.hero-title', {
+        duration: 1,
+        y: 50,
+        opacity: 0,
+        ease: 'power3.out',
+        delay: 0.5
+      });
+
+      gsap.from('.hero-description', {
+        duration: 1,
+        y: 30,
+        opacity: 0,
+        ease: 'power3.out',
+        delay: 0.8
+      });
+
+      gsap.from('.hero-buttons', {
+        duration: 1,
+        y: 30,
+        opacity: 0,
+        ease: 'power3.out',
+        delay: 1.1,
+        stagger: 0.2
+      });
+    });
+
+    // Scroll animations
+    const animateOnScroll = () => {
+      const elements = document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in');
+      
+      elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementBottom = element.getBoundingClientRect().bottom;
+        
+        if (elementTop < window.innerHeight && elementBottom > 0) {
+          element.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', animateOnScroll);
+
+    // Parallax effect for background images
+    const parallaxElements = document.querySelectorAll('.hero-bg');
+    
+    window.addEventListener('scroll', () => {
+      parallaxElements.forEach(element => {
+        const speed = 0.5;
+        const yPos = -(window.pageYOffset * speed);
+        element.style.transform = `translateY(${yPos}px)`;
+      });
+    });
+
+    // Back to Top Button
+    const backToTop = document.getElementById('backToTop');
+
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Reveal on Scroll
+    const revealElements = document.querySelectorAll('.reveal-up');
+
+    const revealOnScroll = () => {
+      revealElements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+
+        if (elementTop < window.innerHeight - elementVisible) {
+          element.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', revealOnScroll);
+    revealOnScroll();
+
+    // Stagger Animation
+    const staggerItems = document.querySelectorAll('.stagger-item');
+
+    const staggerAnimation = () => {
+      staggerItems.forEach((item, index) => {
+        item.style.transitionDelay = `${index * 0.1}s`;
+        if (item.getBoundingClientRect().top < window.innerHeight - 150) {
+          item.classList.add('visible');
+        }
+      });
+    };
+
+    window.addEventListener('scroll', staggerAnimation);
+    staggerAnimation();
+  </script>
+</body>
+</html> 

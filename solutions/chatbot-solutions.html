@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kāna | AI Chatbot Solutions</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.3/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Sora', 'sans-serif'],
+          },
+          colors: {
+            dark: '#050B2E',
+            light: '#F5F5F5',
+            accent: '#00D4FF',
+            'accent-light': '#33DFFF',
+            'accent-dark': '#00A8CC',
+            'accent-secondary': '#9D4EDD',
+            neutral: {
+              100: '#F5F5F5',
+              200: '#E5E5E5',
+              300: '#D4D4D4',
+              400: '#A3A3A3',
+              500: '#737373',
+              600: '#525252',
+              700: '#404040',
+              800: '#262626',
+              900: '#171717',
+              950: '#0A0A0A',
+            },
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Base Styles */
+    body {
+      overflow-x: hidden;
+      background-color: #050B2E;
+      color: #F5F5F5;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.5;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Chatbot-specific Animations */
+    .chat-bubble {
+      position: relative;
+      padding: 1rem;
+      border-radius: 1rem;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .chat-bubble::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .chat-bubble:hover::before {
+      opacity: 1;
+    }
+
+    .chat-bubble:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    /* AI Feature Cards */
+    .ai-feature {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .ai-feature::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(0, 212, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .ai-feature:hover::before {
+      opacity: 1;
+    }
+
+    .ai-feature:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .ai-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .ai-feature:hover .ai-icon {
+      background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Chatbot Demo Section */
+    .chatbot-demo {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      transition: all 0.3s ease;
+      will-change: transform;
+      transform: translateZ(0);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      background: rgba(5, 11, 46, 0.3);
+      border-radius: 0.5rem;
+      margin-bottom: 0.75rem;
+      max-height: 400px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 0.75rem;
+      border-radius: 1rem;
+      position: relative;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    @media (min-width: 768px) {
+      .message {
+        max-width: 80%;
+        padding: 1rem;
+        font-size: 1rem;
+        line-height: 1.5rem;
+      }
+    }
+
+    .message.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .message.user {
+      background: rgba(0, 212, 255, 0.1);
+      margin-left: auto;
+      border-bottom-right-radius: 0.25rem;
+      border: 1px solid rgba(0, 212, 255, 0.2);
+    }
+
+    .message.bot {
+      background: rgba(5, 11, 46, 0.5);
+      margin-right: auto;
+      border-bottom-left-radius: 0.25rem;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .message.typing {
+      background: rgba(5, 11, 46, 0.5);
+      margin-right: auto;
+      border-bottom-left-radius: 0.25rem;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .message.typing span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #00D4FF;
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: typing 1s infinite;
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    @media (min-width: 768px) {
+      .message.typing span {
+        width: 8px;
+        height: 8px;
+      }
+    }
+
+    .input-focused {
+      border-color: #00D4FF !important;
+      box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+    }
+
+    @keyframes typing {
+      0%, 100% { 
+        transform: translateY(0);
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+      }
+      50% { 
+        transform: translateY(-5px);
+        box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+      }
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 767px) {
+      .chatbot-demo {
+        min-height: 350px;
+      }
+
+      .chatbot-messages {
+        max-height: 300px;
+      }
+
+      .btn-primary {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+      }
+    }
+
+    /* AI Capabilities Section */
+    .ai-capability {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .ai-capability:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .ai-capability-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .ai-capability:hover .ai-capability-icon {
+      background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Integration Section */
+    .integration-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(5, 11, 46, 0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      border-radius: 1rem;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .integration-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 212, 255, 0.1);
+    }
+
+    .integration-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(0, 212, 255, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .integration-card:hover .integration-icon {
+      background: rgba(0, 212, 255, 0.2);
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .chatbot-messages {
+        height: 300px;
+      }
+
+      .message {
+        max-width: 90%;
+      }
+
+      .ai-feature {
+        margin-bottom: 1.5rem;
+      }
+
+      .ai-capability {
+        margin-bottom: 1.5rem;
+      }
+
+      .integration-card {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    /* Common Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-left.visible,
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scale-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Navigation Styles */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: rgba(5, 11, 46, 0.95);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      transform: translateY(0);
+      will-change: transform;
+    }
+
+    .nav.hidden {
+      transform: translateY(-100%);
+    }
+
+    .nav.scrolled {
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Button Styles */
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #00D4FF, #33DFFF);
+      color: #050B2E;
+      border: none;
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #00D4FF;
+      color: #00D4FF;
+    }
+
+    .btn-outline:hover {
+      background: rgba(0, 212, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Add these new styles for mobile menu and typing indicator */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 400px;
+      height: 100vh;
+      background: rgba(5, 11, 46, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      transition: right 0.3s ease;
+      z-index: 1001;
+      will-change: transform;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    .mobile-menu.active {
+      right: 0;
+    }
+
+    .mobile-menu a {
+      display: block;
+      padding: 1rem 0;
+      color: #F5F5F5;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .mobile-menu a:hover {
+      color: #00D4FF;
+    }
+
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .typing span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #00D4FF;
+      border-radius: 50%;
+      margin: 0 2px;
+      animation: typing 1s infinite;
+    }
+
+    .typing span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    /* Optimize animations */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* Add performance optimizations */
+    .reveal-up, .stagger-item {
+      will-change: transform, opacity;
+      transform: translateZ(0);
+    }
+
+    /* Add loading state */
+    .loading {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+  </style>
+</head>
+<body class="bg-dark text-light">
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <a href="/" class="text-2xl font-display font-bold text-accent">Kāna</a>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="../index.html" class="text-neutral-400 hover:text-accent transition-colors">Home</a>
+          <a href="../index.html#solutions" class="text-accent">Solutions</a>
+          <a href="../index.html#about" class="text-neutral-400 hover:text-accent transition-colors">About</a>
+            <a href="../index.html#contact" class="text-neutral-400 hover:text-accent transition-colors">Contact</a>    
+        </div>
+        <button id="menu-toggle" class="md:hidden text-neutral-400 hover:text-accent">
+          <i class="fas fa-bars text-2xl"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="menu-overlay"></div>
+  <div class="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+      <a href="/" class="text-2xl font-display font-bold text-accent">Kāna</a>
+      <button id="menu-close" class="text-neutral-400 hover:text-accent">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+    <a href="../index.html" class="text-neutral-400 hover:text-accent transition-colors">Home</a>
+    <a href="../index.html#solutions" class="text-accent">Solutions</a>
+    <a href="../index.html#about" class="text-neutral-400 hover:text-accent transition-colors">About</a>
+    <a href="../index.html#contact" class="text-neutral-400 hover:text-accent transition-colors">Contact</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 md:pt-40 md:pb-32 relative overflow-hidden min-h-[80vh] flex items-center">
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1531746790731-6c087fecd65a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" 
+           alt="AI Chatbot Background" 
+           class="w-full h-full object-cover object-center scale-110">
+      <div class="absolute inset-0 bg-dark/80 backdrop-blur-sm"></div>
+    </div>
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="max-w-4xl">
+        <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">AI Solutions</span>
+        <h1 class="text-4xl md:text-6xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+          Intelligent Chatbots for Modern Businesses
+        </h1>
+        <p class="text-neutral-400 text-lg mb-8 reveal-up" style="transition-delay: 0.2s">
+          Transform your customer service with AI-powered chatbots that understand, learn, and deliver exceptional experiences.
+        </p>
+        <div class="flex flex-wrap gap-4 reveal-up" style="transition-delay: 0.3s">
+          <a href="#demo" class="btn btn-primary">Try Demo</a>
+          <a href="../index.html#contact" class="btn btn-outline">Get Started</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Features Section -->
+  <section class="py-20 md:py-32 bg-dark/80">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mb-16">
+        <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">AI Features</span>
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+          Powered by Advanced AI
+        </h2>
+        <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+          Our chatbots leverage cutting-edge AI technology to provide intelligent, context-aware responses.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="ai-feature p-8 stagger-item">
+          <div class="ai-icon mb-6">
+            <i class="fas fa-brain text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Natural Language Processing</h3>
+          <p class="text-neutral-400">
+            Advanced NLP capabilities that understand context, sentiment, and user intent for more human-like conversations.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="ai-feature p-8 stagger-item">
+          <div class="ai-icon mb-6">
+            <i class="fas fa-robot text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Machine Learning</h3>
+          <p class="text-neutral-400">
+            Continuous learning and improvement from every interaction to provide increasingly accurate responses.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="ai-feature p-8 stagger-item">
+          <div class="ai-icon mb-6">
+            <i class="fas fa-chart-line text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Analytics & Insights</h3>
+          <p class="text-neutral-400">
+            Detailed analytics and reporting to understand user behavior and optimize chatbot performance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chatbot Demo Section -->
+  <section id="demo" class="py-20 md:py-32">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mb-16">
+        <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Interactive Demo</span>
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+          Experience Our Chatbot
+        </h2>
+        <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+          Try our chatbot demo to see how it can handle real customer queries and provide intelligent responses.
+        </p>
+      </div>
+
+      <div class="chatbot-demo p-4 md:p-6">
+        <div class="chatbot-messages">
+          <!-- Initial messages will be added by JavaScript -->
+        </div>
+        <form class="mt-4 md:mt-6 flex gap-2 md:gap-4 items-center" onsubmit="return false;">
+          <input type="text" id="chat-input" placeholder="Type your message..." class="flex-1 bg-dark/50 border border-neutral-700 rounded-lg px-3 md:px-4 py-2 text-sm md:text-base focus:outline-none focus:border-accent" autocomplete="off">
+          <button type="button" id="send-button" class="btn btn-primary p-2 md:px-6 text-sm md:text-base whitespace-nowrap flex items-center justify-center min-w-[40px] md:min-w-[80px]">
+            <i class="fas fa-paper-plane md:mr-2"></i>
+            <span class="hidden md:inline">Send</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Capabilities Section -->
+  <section class="py-20 md:py-32 bg-dark/80">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mb-16">
+        <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Capabilities</span>
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+          What Our AI Can Do
+        </h2>
+        <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+          Discover the powerful capabilities of our AI chatbot technology.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Capability 1 -->
+        <div class="ai-capability stagger-item">
+          <div class="ai-capability-icon">
+            <i class="fas fa-comments text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Multi-language Support</h3>
+          <p class="text-neutral-400">
+            Communicate with customers in multiple languages with natural, fluent responses.
+          </p>
+        </div>
+
+        <!-- Capability 2 -->
+        <div class="ai-capability stagger-item">
+          <div class="ai-capability-icon">
+            <i class="fas fa-tasks text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Task Automation</h3>
+          <p class="text-neutral-400">
+            Automate routine tasks and processes to improve efficiency and reduce manual work.
+          </p>
+        </div>
+
+        <!-- Capability 3 -->
+        <div class="ai-capability stagger-item">
+          <div class="ai-capability-icon">
+            <i class="fas fa-shield-alt text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Security & Privacy</h3>
+          <p class="text-neutral-400">
+            Enterprise-grade security with data encryption and privacy protection.
+          </p>
+        </div>
+
+        <!-- Capability 4 -->
+        <div class="ai-capability stagger-item">
+          <div class="ai-capability-icon">
+            <i class="fas fa-sync text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">24/7 Availability</h3>
+          <p class="text-neutral-400">
+            Provide instant support and assistance to customers around the clock.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Section -->
+  <section class="py-20 md:py-32">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mb-16">
+        <span class="text-xs uppercase tracking-widest text-neutral-400 mb-3 block reveal-up">Integrations</span>
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up" style="transition-delay: 0.1s">
+          Seamless Integration
+        </h2>
+        <p class="text-neutral-400 max-w-2xl reveal-up" style="transition-delay: 0.2s">
+          Connect your chatbot with your existing tools and platforms.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Integration 1 -->
+        <div class="integration-card stagger-item">
+          <div class="integration-icon">
+            <i class="fab fa-slack text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Slack</h3>
+          <p class="text-neutral-400">
+            Integrate with Slack for team communication and notifications.
+          </p>
+        </div>
+
+        <!-- Integration 2 -->
+        <div class="integration-card stagger-item">
+          <div class="integration-icon">
+            <i class="fab fa-salesforce text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">Salesforce</h3>
+          <p class="text-neutral-400">
+            Connect with Salesforce for CRM integration and customer data sync.
+          </p>
+        </div>
+
+        <!-- Integration 3 -->
+        <div class="integration-card stagger-item">
+          <div class="integration-icon">
+            <i class="fab fa-whatsapp text-2xl text-accent"></i>
+          </div>
+          <h3 class="text-xl font-display font-medium mb-4">WhatsApp</h3>
+          <p class="text-neutral-400">
+            Reach customers through WhatsApp with automated messaging.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section id="contact" class="py-20 md:py-32 bg-dark/80">
+    <div class="container mx-auto px-6">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-5xl font-display font-medium mb-6 reveal-up">
+          Ready to Transform Your Customer Service?
+        </h2>
+        <p class="text-neutral-400 mb-8 reveal-up" style="transition-delay: 0.1s">
+          Get started with our AI chatbot solution and revolutionize your customer interactions.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 reveal-up" style="transition-delay: 0.2s">
+            <a href="../index.html#contact" class="btn btn-primary">Schedule Demo</a>
+          <a href="../index.html#contact" class="btn btn-outline">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 border-t border-neutral-800">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="text-center md:text-left">
+          <a href="../index.html" class="text-xl font-display font-medium link-trigger">
+            Kāna<span class="text-accent">.</span>
+          </a>
+          <p class="text-neutral-400 mt-4 max-w-md">
+            Creating innovative digital solutions for businesses worldwide.
+          </p>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="#" class="text-neutral-400 hover:text-accent transition-colors">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    // Load scripts asynchronously with proper order
+    const scripts = [
+      {
+        src: 'https://cdn.tailwindcss.com',
+        priority: 'high'
+      },
+      {
+        src: 'https://unpkg.com/gsap@3.12.2/dist/gsap.min.js',
+        priority: 'high'
+      },
+      {
+        src: 'https://unpkg.com/gsap@3.12.2/dist/ScrollTrigger.min.js',
+        priority: 'high'
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js',
+        priority: 'low'
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/split-type@0.3.3/umd/index.min.js',
+        priority: 'low'
+      },
+      {
+        src: 'https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js',
+        priority: 'low'
+      },
+      {
+        src: './js/chat-demo.js',
+        priority: 'high'
+      }
+    ];
+
+    // Load scripts in order of priority
+    const loadScript = (script) => {
+      return new Promise((resolve, reject) => {
+        const element = document.createElement('script');
+        element.src = script.src;
+        element.async = true;
+        element.onload = resolve;
+        element.onerror = reject;
+        document.body.appendChild(element);
+      });
+    };
+
+    // Initialize chat demo only once
+    let chatDemoInstance = null;
+
+    function initializeChatDemo() {
+      if (!chatDemoInstance && typeof ChatDemo !== 'undefined') {
+        console.log('Initializing ChatDemo...');
+        chatDemoInstance = new ChatDemo();
+      }
+    }
+
+    // Load chat-demo.js first and initialize
+    loadScript(scripts.find(s => s.src === './js/chat-demo.js'))
+      .then(() => {
+        initializeChatDemo();
+      })
+      .catch(error => {
+        console.error('Error loading chat-demo.js:', error);
+      });
+
+    // Load other scripts
+    const highPriorityScripts = scripts.filter(s => s.priority === 'high' && s.src !== './js/chat-demo.js');
+    const lowPriorityScripts = scripts.filter(s => s.priority === 'low');
+
+    Promise.all(highPriorityScripts.map(loadScript))
+      .then(() => {
+        // Load low priority scripts after high priority ones
+        lowPriorityScripts.forEach(loadScript);
+      })
+      .catch(error => {
+        console.error('Error loading scripts:', error);
+      });
+
+    // Initialize GSAP ScrollTrigger with performance optimizations
+    window.addEventListener('load', () => {
+      if (typeof gsap !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Optimize scroll animations
+        ScrollTrigger.config({
+          limitCallbacks: true,
+          ignoreMobileResize: true
+        });
+
+        // Reveal animations with performance optimizations
+        const revealElements = document.querySelectorAll('.reveal-up');
+        revealElements.forEach(element => {
+          gsap.from(element, {
+            scrollTrigger: {
+              trigger: element,
+              start: 'top 80%',
+              end: 'bottom 20%',
+              toggleActions: 'play none none reverse',
+              fastScrollEnd: true
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+          });
+        });
+
+        // Stagger animations with performance optimizations
+        const staggerElements = document.querySelectorAll('.stagger-item');
+        staggerElements.forEach((element, index) => {
+          gsap.from(element, {
+            scrollTrigger: {
+              trigger: element,
+              start: 'top 80%',
+              end: 'bottom 20%',
+              toggleActions: 'play none none reverse',
+              fastScrollEnd: true
+            },
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            delay: index * 0.2,
+            ease: 'power3.out'
+          });
+        });
+      }
+    });
+
+    // Optimize navigation scroll effect
+    const nav = document.querySelector('.nav');
+    let lastScroll = 0;
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScroll = window.pageYOffset;
+          
+          if (currentScroll <= 0) {
+            nav.classList.remove('scrolled');
+            nav.classList.remove('hidden');
+          } else {
+            nav.classList.add('scrolled');
+            if (currentScroll > lastScroll && currentScroll > 100) {
+              nav.classList.add('hidden');
+            } else {
+              nav.classList.remove('hidden');
+            }
+          }
+          
+          lastScroll = currentScroll;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // Mobile menu functionality
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuClose = document.getElementById('menu-close');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const menuOverlay = document.querySelector('.menu-overlay');
+
+    function toggleMenu() {
+      mobileMenu.classList.toggle('active');
+      menuOverlay.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    menuToggle.addEventListener('click', toggleMenu);
+    menuClose.addEventListener('click', toggleMenu);
+    menuOverlay.addEventListener('click', toggleMenu);
+  </script>
+</body>
+</html> 

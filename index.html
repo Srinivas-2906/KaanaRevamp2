@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Horizon | Digital Solutions</title>
+<title>Kāna | Digital Solutions</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -344,7 +344,7 @@
   /* Scroll Indicator */
   .scroll-indicator {
     position: absolute;
-    bottom: 2rem;
+    bottom: -6rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
@@ -1157,7 +1157,9 @@
     color: white;
     outline: none;
   }
-
+  .head1{
+    margin-top: 100px;
+  }
   .ai-demo-input button {
     padding: 10px 20px;
     border-radius: 8px;
@@ -1248,6 +1250,200 @@
       width: 100%;
     }
   }
+
+  /* Kāna AI Assistant Styles */
+  .kana-ai-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    max-width: 90vw;
+    height: 600px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .kana-ai-header {
+    padding: 16px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .kana-ai-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.1rem;
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.3s;
+  }
+
+  .close-btn:hover {
+    color: #fff;
+  }
+
+  .kana-ai-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .message {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .message.user {
+    background: #1a1a1a;
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .message.bot {
+    background: #1a1a1a;
+    color: #fff;
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+
+  .message.typing {
+    display: flex;
+    gap: 4px;
+    padding: 12px 16px;
+  }
+
+  .message.typing span {
+    width: 8px;
+    height: 8px;
+    background: #666;
+    border-radius: 50%;
+    animation: typing 1s infinite;
+  }
+
+  .message.typing span:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .message.typing span:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  .predefined-prompts {
+    padding: 16px;
+    border-top: 1px solid #333;
+  }
+
+  .prompt-btn {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+    text-align: left;
+  }
+
+  .prompt-btn:hover {
+    border-color: #00ff88;
+    transform: translateY(-2px);
+  }
+
+  .prompt-btn i {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+    color: #00ff88;
+  }
+
+  .prompt-btn h3 {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .kana-ai-input-container {
+    padding: 16px;
+    border-top: 1px solid #333;
+    display: flex;
+    gap: 8px;
+  }
+
+  .kana-ai-input {
+    flex: 1;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    color: #fff;
+    font-size: 0.9rem;
+  }
+
+  .kana-ai-input:focus {
+    outline: none;
+    border-color: #00ff88;
+  }
+
+  .kana-ai-send {
+    background: #00ff88;
+    border: none;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .kana-ai-send:hover {
+    background: #00cc6a;
+    transform: translateY(-2px);
+  }
+
+  .kana-ai-send i {
+    color: #000;
+  }
+
+  @keyframes typing {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    .kana-ai-container {
+      width: 100%;
+      height: 100%;
+      bottom: 0;
+      right: 0;
+      border-radius: 0;
+    }
+  }
 </style>
 </head>
 <body class="bg-dark text-light">
@@ -1272,7 +1468,7 @@
     <div class="container mx-auto px-6">
       <div class="flex items-center justify-between">
         <a href="#" class="text-xl font-display font-medium link-trigger">
-          Horizon<span class="text-accent">.</span>
+          Kāna<span class="text-accent">.</span>
         </a>
 
         <nav class="hidden md:flex items-center gap-8">
@@ -1315,127 +1511,124 @@
   <!-- Main Content -->
   <main>
     <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center pt-20">
+    <section id="home" class="relative min-h-screen flex items-center justify-center">
       <!-- Particles Canvas -->
-      <canvas id="particles-canvas"></canvas>
+      <canvas id="particles-canvas" class="absolute inset-0"></canvas>
       
       <!-- Neural Network Animation -->
-      <canvas id="neural-network" class="neural-network"></canvas>
+      <canvas id="neural-network" class="neural-network absolute inset-0"></canvas>
       
-      <!-- Animated Background Shapes -->
-      <div class="animated-bg">
-        <div class="animated-bg-shape" style="width: 600px; height: 600px; top: -10%; left: -10%;"></div>
-        <div class="animated-bg-shape" style="width: 500px; height: 500px; bottom: -10%; right: -10%; animation-delay: 2s;"></div>
-      </div>
-
-      <!-- AI Blobs -->
-      <div class="ai-blob" style="width: 300px; height: 300px; top: 20%; left: 10%;"></div>
-      <div class="ai-blob" style="width: 250px; height: 250px; bottom: 10%; right: 15%; animation-delay: 3s;"></div>
-
-      <div class="container mx-auto px-6 py-10 md:py-20">
-        <div class="max-w-4xl mx-auto text-center">
-          <div class="overflow-hidden mb-4">
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-medium leading-tight split-text" id="heroTitle">
-              Digital <span class="text-gradient">Solutions</span> for Tomorrow
+      <div class="container mx-auto px-6 relative z-10">
+        <div class="max-w-4xl mx-auto text-center space-y-4">
+          <div class= "head1">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-display font-medium leading-tight mb-2">
+              Digital <span class="text-gradient">Solutions</span><br/> for Tomorrow
             </h1>
           </div>
-          <p class="text-lg md:text-xl text-neutral-400 mb-8 max-w-2xl mx-auto reveal-up" style="transition-delay: 0.2s">
+         
+          <p class="text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto">
             Creating cutting-edge digital experiences and technology solutions for forward-thinking businesses
           </p>
-          <div class="flex flex-wrap justify-center gap-4 reveal-up" style="transition-delay: 0.4s">
-            <div class="magnetic-wrap">
-              <a href="#solutions" class="magnetic-area btn btn-primary link-trigger">
-                Explore Solutions
-                <i class="fas fa-arrow-right text-xs ml-2 btn-icon"></i>
-              </a>
-            </div>
-            <div class="magnetic-wrap">
-              <a href="#ai-demo" class="magnetic-area btn btn-outline link-trigger">
-                Try AI Demo
-              </a>
-            </div>
+          <div class="flex flex-wrap justify-center gap-4 mt-8">
+            <a href="#solutions" class="btn btn-primary">
+              Explore Solutions
+              <i class="fas fa-arrow-right text-xs ml-2 btn-icon"></i>
+            </a>
+            <a href="#ai-demo" class="btn btn-outline">
+              Try AI Demo
+            </a>
           </div>
-          
+
           <!-- Hero Swiper -->
-          <div class="swiper hero-swiper mt-10 reveal-up" style="transition-delay: 0.6s">
+          <div class="swiper hero-swiper mt-12">
             <div class="swiper-wrapper">
               <!-- Slide 1 -->
               <div class="swiper-slide">
-                <div class="card-3d w-full max-w-md">
+                <div class="card-3d w-full max-w-md mx-auto">
                   <div class="card-3d-inner border border-neutral-800 rounded-sm p-6 text-center hover-lift bg-dark/50 backdrop-blur-md">
-                    <div class="text-accent text-3xl mb-4">
-                      <i class="fas fa-laptop-code"></i>
-                    </div>
-                    <h3 class="text-xl font-display font-medium mb-2">Web Design</h3>
-                    <p class="text-neutral-400">Creating stunning, responsive websites that captivate your audience and drive conversions.</p>
+                    <a href="/solutions/web-design.html" class="block">
+                      <div class="text-accent text-3xl mb-4 hover-scale">
+                        <i class="fas fa-laptop-code"></i>
+                      </div>
+                      <h3 class="text-xl font-display font-medium mb-2">Web Design</h3>
+                      <p class="text-neutral-400">Creating stunning, responsive websites that captivate your audience and drive conversions.</p>
+                    </a>
                   </div>
                 </div>
               </div>
               
               <!-- Slide 2 -->
               <div class="swiper-slide">
-                <div class="card-3d w-full max-w-md">
+                <div class="card-3d w-full max-w-md mx-auto">
                   <div class="card-3d-inner border border-neutral-800 rounded-sm p-6 text-center hover-lift bg-dark/50 backdrop-blur-md">
-                    <div class="text-accent text-3xl mb-4">
-                      <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3 class="text-xl font-display font-medium mb-2">App Development</h3>
-                    <p class="text-neutral-400">Building powerful, intuitive mobile applications for iOS and Android platforms.</p>
+                    <a href="/solutions/app-development.html" class="block">
+                      <div class="text-accent text-3xl mb-4 hover-scale">
+                        <i class="fas fa-mobile-alt"></i>
+                      </div>
+                      <h3 class="text-xl font-display font-medium mb-2">App Development</h3>
+                      <p class="text-neutral-400">Building powerful, intuitive mobile applications for iOS and Android platforms.</p>
+                    </a>
                   </div>
                 </div>
               </div>
               
               <!-- Slide 3 -->
               <div class="swiper-slide">
-                <div class="card-3d w-full max-w-md">
+                <div class="card-3d w-full max-w-md mx-auto">
                   <div class="card-3d-inner border border-neutral-800 rounded-sm p-6 text-center hover-lift bg-dark/50 backdrop-blur-md">
-                    <div class="text-accent text-3xl mb-4">
-                      <i class="fas fa-robot"></i>
-                    </div>
-                    <h3 class="text-xl font-display font-medium mb-2">Chatbot Solutions</h3>
-                    <p class="text-neutral-400">Implementing intelligent chatbots that enhance customer service and streamline operations.</p>
+                    <a href="/solutions/chatbot-solutions.html" class="block">
+                      <div class="text-accent text-3xl mb-4 hover-scale">
+                        <i class="fas fa-robot"></i>
+                      </div>
+                      <h3 class="text-xl font-display font-medium mb-2">Chatbot Solutions</h3>
+                      <p class="text-neutral-400">Implementing intelligent chatbots that enhance customer service and streamline operations.</p>
+                    </a>
                   </div>
                 </div>
               </div>
               
               <!-- Slide 4 -->
               <div class="swiper-slide">
-                <div class="card-3d w-full max-w-md">
+                <div class="card-3d w-full max-w-md mx-auto">
                   <div class="card-3d-inner border border-neutral-800 rounded-sm p-6 text-center hover-lift bg-dark/50 backdrop-blur-md">
-                    <div class="text-accent text-3xl mb-4">
-                      <i class="fas fa-shopping-cart"></i>
-                    </div>
-                    <h3 class="text-xl font-display font-medium mb-2">E-commerce</h3>
-                    <p class="text-neutral-400">Creating powerful online stores with seamless checkout experiences and inventory management.</p>
+                    <a href="/solutions/e-commerce-solutions.html" class="block">
+                      <div class="text-accent text-3xl mb-4 hover-scale">
+                        <i class="fas fa-shopping-cart"></i>
+                      </div>
+                      <h3 class="text-xl font-display font-medium mb-2">E-commerce</h3>
+                      <p class="text-neutral-400">Creating powerful online stores with seamless checkout experiences and inventory management.</p>
+                    </a>
                   </div>
                 </div>
               </div>
               
               <!-- Slide 5 -->
               <div class="swiper-slide">
-                <div class="card-3d w-full max-w-md">
+                <div class="card-3d w-full max-w-md mx-auto">
                   <div class="card-3d-inner border border-neutral-800 rounded-sm p-6 text-center hover-lift bg-dark/50 backdrop-blur-md">
-                    <div class="text-accent text-3xl mb-4">
-                      <i class="fas fa-bullhorn"></i>
-                    </div>
-                    <h3 class="text-xl font-display font-medium mb-2">Digital Marketing</h3>
-                    <p class="text-neutral-400">Driving growth through strategic SEO, content marketing, and social media campaigns.</p>
+                    <a href="/solutions/digital-marketing-solutions.html" class="block">
+                      <div class="text-accent text-3xl mb-4 hover-scale">
+                        <i class="fas fa-bullhorn"></i>
+                      </div>
+                      <h3 class="text-xl font-display font-medium mb-2">Digital Marketing</h3>
+                      <p class="text-neutral-400">Driving growth through strategic SEO, content marketing, and social media campaigns.</p>
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
             
             <!-- Pagination -->
-            <div class="hero-swiper-pagination mt-6"></div>
+            <div class="swiper-pagination mt-6"></div>
           </div>
 
           <!-- AI Assistant Demo -->
-          <div class="mt-10 max-w-lg mx-auto border border-neutral-800 rounded-sm p-4 bg-dark/50 backdrop-blur-md reveal-up" style="transition-delay: 0.8s">
+          <div class="mt-12 max-w-lg mx-auto border border-neutral-800 rounded-sm p-4 bg-dark/50 backdrop-blur-md">
             <div class="flex items-center gap-3 mb-3">
-              <div class="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-accent-secondary flex items-center justify-center">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-r from-accent to-accent-secondary flex items-center justify-center hover-scale">
                 <i class="fas fa-robot text-dark text-xs"></i>
               </div>
-              <div class="text-sm font-medium">Horizon AI Assistant</div>
+              <div class="text-sm font-medium">Kāna AI Assistant</div>
             </div>
             <div class="typing text-left text-sm text-neutral-300 overflow-hidden whitespace-nowrap" id="aiTyping">
               How can I help transform your business with digital solutions today?
@@ -1466,11 +1659,12 @@
             <div class="ai-feature-icon mb-6">
               <i class="fas fa-laptop-code text-2xl text-accent"></i>
             </div>
+          
             <h3 class="text-xl font-display font-medium mb-3">Web Design</h3>
             <p class="text-neutral-400 mb-6">
               Create stunning, responsive websites that captivate your audience and drive conversions with our expert design team.
             </p>
-            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+            <a href="/solutions/web-design.html" class="text-sm text-accent flex items-center link-trigger">
               Learn more
               <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
             </a>
@@ -1485,7 +1679,7 @@
             <p class="text-neutral-400 mb-6">
               Build powerful, intuitive mobile applications for iOS and Android that enhance user engagement and satisfaction.
             </p>
-            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+            <a href="/solutions/app-development.html" class="text-sm text-accent flex items-center link-trigger">
               Learn more
               <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
             </a>
@@ -1500,7 +1694,7 @@
             <p class="text-neutral-400 mb-6">
               Implement intelligent chatbots that enhance customer service, answer queries 24/7, and streamline operations.
             </p>
-            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+              <a href="/solutions/chatbot-solutions.html" class="text-sm text-accent flex items-center link-trigger">
               Learn more
               <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
             </a>
@@ -1515,7 +1709,7 @@
             <p class="text-neutral-400 mb-6">
               Create powerful online stores with seamless checkout experiences, inventory management, and payment processing.
             </p>
-            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+              <a href="/solutions/e-commerce-solutions.html" class="text-sm text-accent flex items-center link-trigger">
               Learn more
               <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
             </a>
@@ -1530,7 +1724,7 @@
             <p class="text-neutral-400 mb-6">
               Drive growth through strategic SEO, content marketing, social media campaigns, and paid advertising strategies.
             </p>
-            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+              <a href="/solutions/digital-marketing-solutions.html" class="text-sm text-accent flex items-center link-trigger">
               Learn more
               <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
             </a>
@@ -1545,7 +1739,7 @@
             <p class="text-neutral-400 mb-6">
               Gain valuable insights from your data with advanced analytics solutions that help you make informed business decisions.
             </p>
-            <a href="#" class="text-sm text-accent flex items-center link-trigger">
+            <a href="/solutions/analytics-solutions.html" class="text-sm text-accent flex items-center link-trigger">
               Learn more
               <i class="fas fa-arrow-right text-xs ml-2 transition-transform duration-300 group-hover:translate-x-1"></i>
             </a>
@@ -1604,7 +1798,7 @@
               <p class="text-neutral-400 mb-4">Ask our chatbot about our services and see how it can help your customers.</p>
               <div class="ai-chat-messages p-4 border border-neutral-800 rounded-sm bg-dark/30 h-40 overflow-y-auto mb-4" id="demoChatMessages">
                 <div class="ai-message ai-message-bot">
-                  Hello! I'm the Horizon demo chatbot. How can I help you today?
+                  Hello! I'm the Kāna demo chatbot. How can I help you today?
                 </div>
               </div>
               <div class="ai-demo-input">
@@ -1891,7 +2085,7 @@
               We build digital solutions for tomorrow
             </h2>
             <p class="text-neutral-400 mb-6 reveal-up" style="transition-delay: 0.2s">
-              Horizon is a technology solutions company focused on creating minimalist, cutting-edge digital experiences that solve complex business challenges.
+              Kāna is a technology solutions company focused on creating minimalist, cutting-edge digital experiences that solve complex business challenges.
             </p>
             <p class="text-neutral-400 mb-8 reveal-up" style="transition-delay: 0.3s">
               Our team of experts combines technical excellence with design thinking to deliver solutions that are not only functional but also aesthetically refined and future-proof.
@@ -1936,10 +2130,10 @@
               </p>
               <div class="flex items-center">
                 <div class="w-10 h-10 rounded-full overflow-hidden mr-3">
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&h=100&q=80" alt="CEO" class="w-full h-full object-cover">
+                  <img src="images/img navya_imresizer.jpg" alt="CEO" class="w-full h-full object-cover">
                 </div>
                 <div>
-                  <div class="font-medium">Alex Chen</div>
+                  <div class="font-medium">Navya</div>
                   <div class="text-sm text-neutral-400">Founder & CEO</div>
                 </div>
               </div>
@@ -1971,7 +2165,7 @@
                   </svg>
                 </div>
                 <blockquote class="text-xl md:text-2xl font-display mb-8">
-                  Horizon transformed our online presence with their web design expertise. The team's attention to detail and user-focused approach helped us achieve a 40% increase in conversions.
+                  Kāna transformed our online presence with their web design expertise. The team's attention to detail and user-focused approach helped us achieve a 40% increase in conversions.
                 </blockquote>
                 <div class="flex items-center">
                   <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
@@ -1995,7 +2189,7 @@
                   </svg>
                 </div>
                 <blockquote class="text-xl md:text-2xl font-display mb-8">
-                  The e-commerce platform designed by Horizon has revolutionized our online sales. Their minimalist approach to complex problems delivered exactly what we needed.
+                  The e-commerce platform designed by Kāna has revolutionized our online sales. Their minimalist approach to complex problems delivered exactly what we needed.
                 </blockquote>
                 <div class="flex items-center">
                   <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
@@ -2019,7 +2213,7 @@
                   </svg>
                 </div>
                 <blockquote class="text-xl md:text-2xl font-display mb-8">
-                  Horizon's chatbot solution has provided unprecedented customer support for our business. Their elegant approach to digital solutions is refreshingly effective.
+                  Kāna's chatbot solution has provided unprecedented customer support for our business. Their elegant approach to digital solutions is refreshingly effective.
                 </blockquote>
                 <div class="flex items-center">
                   <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
@@ -2066,7 +2260,7 @@
                 </div>
                 <div>
                   <h3 class="font-medium mb-1">Location</h3>
-                  <p class="text-neutral-400">123 Innovation Street, San Francisco, CA 94103</p>
+                  <p class="text-neutral-400">Muralinagar, Visakhapatnam, AP, 530007</p>
                 </div>
               </div>
               
@@ -2078,7 +2272,7 @@
                 </div>
                 <div>
                   <h3 class="font-medium mb-1">Email</h3>
-                  <p class="text-neutral-400">hello@horizondigital.com</p>
+                  <p class="text-neutral-400">kaana.sriman@gmail.com</p>
                 </div>
               </div>
               
@@ -2090,7 +2284,7 @@
                 </div>
                 <div>
                   <h3 class="font-medium mb-1">Phone</h3>
-                  <p class="text-neutral-400">+1 (555) 123-4567</p>
+                  <p class="text-neutral-400">+91 9008747926</p>
                 </div>
               </div>
             </div>
@@ -2148,6 +2342,9 @@
         </div>
       </div>
     </section>
+
+   
+    </section>
   </main>
 
   <!-- Footer -->
@@ -2156,7 +2353,7 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
         <div class="md:col-span-2">
           <a href="#" class="text-xl font-display font-medium mb-4 inline-block link-trigger">
-            Horizon<span class="text-accent">.</span>
+            Kāna<span class="text-accent">.</span>
           </a>
           <p class="text-neutral-400 mb-6 max-w-md">
             We create minimalist, cutting-edge digital solutions that transform businesses and elevate user experiences in the digital landscape.
@@ -2202,7 +2399,7 @@
       </div>
       
       <div class="pt-8 border-t border-neutral-900 flex flex-col md:flex-row justify-between items-center">
-        <p class="text-neutral-400 mb-4 md:mb-0">© 2023 Horizon. All rights reserved.</p>
+        <p class="text-neutral-400 mb-4 md:mb-0">© 2025 Kāna. All rights reserved.</p>
         <div class="flex gap-6">
           <a href="#" class="text-neutral-400 hover:text-accent transition-colors link-trigger">Privacy Policy</a>
           <a href="#" class="text-neutral-400 hover:text-accent transition-colors link-trigger">Terms of Service</a>
@@ -2223,12 +2420,12 @@
     </div>
     <div class="ai-chat-panel" id="aiChatPanel">
       <div class="ai-chat-header">
-        <div>Horizon AI Assistant</div>
+        <div>Kāna AI Assistant</div>
         <div class="ai-chat-close" id="aiChatClose">×</div>
       </div>
       <div class="ai-chat-messages" id="aiChatMessages">
         <div class="ai-message ai-message-bot">
-          Hello! I'm Horizon's AI assistant. How can I help you today?
+          Hello! I'm Kāna's AI assistant. How can I help you today?
         </div>
       </div>
       <div class="ai-chat-input">
@@ -2237,6 +2434,24 @@
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- Kāna AI Assistant -->
+  <div class="kana-ai-container">
+    <div class="kana-ai-header">
+      <h3>Kāna AI Assistant</h3>
+      <button class="close-btn" onclick="closeKanaAI()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="kana-ai-messages"></div>
+    <div class="predefined-prompts grid grid-cols-1 sm:grid-cols-3 gap-4 p-4"></div>
+    <div class="kana-ai-input-container">
+      <input type="text" id="kana-ai-input" placeholder="Ask me anything..." class="kana-ai-input">
+      <button id="kana-ai-send" class="kana-ai-send">
+        <i class="fas fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 
@@ -2305,7 +2520,7 @@
     const aiResponses = [
       "I can help you implement digital solutions for your business. What specific challenges are you facing?",
       "Our web design services can help you create a stunning online presence. Would you like to learn more?",
-      "Horizon's chatbot solutions can automate customer service tasks. Shall I explain how?",
+      "Kāna's chatbot solutions can automate customer service tasks. Shall I explain how?",
       "We specialize in creating custom e-commerce platforms tailored to your industry. What sector are you in?",
       "Our digital marketing strategies can help increase your online visibility. Would you like a demonstration?",
       "I'd be happy to schedule a consultation with our specialists. When would work best for you?"
@@ -2313,13 +2528,22 @@
 
     // Demo Chat Responses
     const demoChatResponses = {
+      "hi": "Hello! I'm Kāna's AI assistant. How can I help you today?",
+      "hello": "Hi there! I'm here to help you learn about our services. What would you like to know?",
+      "hey": "Hey! Welcome to Kāna. I can tell you about our web design, app development, chatbot, e-commerce, or digital marketing services. What interests you?",
+      "greetings": "Greetings! I'm your AI assistant at Kāna. How may I assist you today?",
       "web design": "Our web design services create responsive, user-friendly websites that look great on all devices. We focus on creating intuitive navigation, fast loading times, and designs that convert visitors into customers. Would you like to see some examples of our recent work?",
       "app": "Our app development team creates native and cross-platform mobile applications for iOS and Android. We handle everything from UI/UX design to development, testing, and deployment. Our apps are built with scalability and performance in mind. What type of app are you interested in developing?",
       "chatbot": "Our chatbot solutions use advanced natural language processing to provide 24/7 customer support, answer FAQs, and even process orders or bookings. They can be integrated with your website, social media platforms, or messaging apps. Would you like to know more about implementation?",
       "e-commerce": "Our e-commerce solutions include custom online stores with secure payment processing, inventory management, and marketing tools. We can build on platforms like Shopify or WooCommerce, or create custom solutions for unique requirements. What products do you sell online?",
       "marketing": "Our digital marketing services include SEO, content marketing, social media management, PPC advertising, and email campaigns. We create data-driven strategies that increase your online visibility and drive conversions. Which marketing channels are you currently using?",
       "price": "Our pricing varies based on project scope and requirements. We offer flexible packages starting from $2,500 for basic websites, $5,000 for e-commerce sites, and $10,000 for custom applications. Would you like to schedule a consultation for a detailed quote?",
-      "contact": "You can reach our team at hello@horizondigital.com or call us at +1 (555) 123-4567. Alternatively, you can fill out the contact form on our website, and we'll get back to you within 24 hours. Would you like me to connect you with a project manager now?"
+      "contact": "You can reach our team at Kāna or call us at +91 9008747926. Alternatively, you can fill out the contact form on our website, and we'll get back to you within 24 hours. Would you like me to connect you with a project manager now?",
+      "thanks": "You're welcome! Is there anything else you'd like to know about our services?",
+      "thank you": "You're welcome! Feel free to ask if you have any other questions about our services.",
+      "bye": "Goodbye! If you need more information later, don't hesitate to ask. Have a great day!",
+      "goodbye": "Take care! Feel free to return if you have more questions about our services.",
+      "default": "I'm here to help you learn about our services. Would you like to know about our web design, app development, chatbot, e-commerce, or digital marketing services?"
     };
 
     // AI Text Generator Responses
@@ -3133,6 +3357,433 @@
       initAiTypingAnimation();
       initBackToTop();
       initContactForm();
+    });
+
+    // AI Text Generator Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const topicBtns = document.querySelectorAll('.topic-btn');
+      const customTopicInput = document.getElementById('customTopic');
+      const generateBtn = document.getElementById('generateBtn');
+      const generatedContent = document.getElementById('generatedContent');
+      const contentText = document.getElementById('contentText');
+      const copyBtn = document.getElementById('copyBtn');
+
+      // Sample content for different topics
+      const topicContent = {
+        'Technology Trends': [
+          'The future of technology is rapidly evolving with emerging trends like quantum computing, 5G networks, and artificial intelligence.',
+          'Edge computing is becoming increasingly important as we move towards a more connected world.',
+          'Sustainable technology solutions are gaining traction as environmental concerns grow.',
+          'The integration of AI in everyday devices is transforming how we interact with technology.'
+        ],
+        'Business Strategy': [
+          'Successful business strategies require a balance of innovation and risk management.',
+          'Digital transformation is essential for businesses to stay competitive in today\'s market.',
+          'Customer-centric approaches are becoming the foundation of successful business models.',
+          'Data-driven decision making is revolutionizing how companies operate.'
+        ],
+        'Digital Marketing': [
+          'Social media marketing continues to evolve with new platforms and features.',
+          'Content marketing remains a crucial element of successful digital strategies.',
+          'Personalization is becoming increasingly important in marketing campaigns.',
+          'Video content is dominating social media engagement metrics.'
+        ],
+        'Web Development': [
+          'Modern web development focuses on performance, accessibility, and user experience.',
+          'Progressive Web Apps are bridging the gap between web and native applications.',
+          'JavaScript frameworks continue to evolve with new features and capabilities.',
+          'Web security remains a top priority for developers and businesses.'
+        ],
+        'AI & Machine Learning': [
+          'Machine learning algorithms are becoming more sophisticated and accessible.',
+          'AI is transforming industries through automation and intelligent decision-making.',
+          'Natural language processing is improving human-computer interactions.',
+          'Ethical AI development is gaining importance in the tech community.'
+        ],
+        'Cybersecurity': [
+          'Zero-trust security models are becoming the standard for enterprise protection.',
+          'Cloud security is evolving to meet new challenges in distributed computing.',
+          'AI-powered security solutions are helping detect and prevent cyber threats.',
+          'Employee training remains crucial for maintaining strong security practices.'
+        ]
+      };
+
+      // Function to generate content
+      function generateContent(topic) {
+        const content = topicContent[topic] || [
+          `Exploring the topic of ${topic} reveals interesting insights and perspectives.`,
+          'This area continues to evolve with new developments and innovations.',
+          'Understanding the key principles is essential for success.',
+          'Future trends suggest continued growth and transformation.'
+        ];
+
+        // Clear previous content
+        contentText.innerHTML = '';
+        
+        // Add new content with typing effect
+        content.forEach((paragraph, index) => {
+          const p = document.createElement('p');
+          p.textContent = paragraph;
+          contentText.appendChild(p);
+          
+          // Add typing animation
+          gsap.from(p, {
+            opacity: 0,
+            y: 20,
+            duration: 0.5,
+            delay: index * 0.2,
+            ease: 'power2.out'
+          });
+        });
+
+        // Show the content section
+        generatedContent.classList.remove('hidden');
+        generatedContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      // Event listeners for topic buttons
+      topicBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const topic = btn.dataset.topic;
+          generateContent(topic);
+        });
+      });
+
+      // Event listener for generate button
+      generateBtn.addEventListener('click', () => {
+        const topic = customTopicInput.value.trim();
+        if (topic) {
+          generateContent(topic);
+        }
+      });
+
+      // Event listener for copy button
+      copyBtn.addEventListener('click', () => {
+        const text = contentText.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          const originalIcon = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+          setTimeout(() => {
+            copyBtn.innerHTML = originalIcon;
+          }, 2000);
+        });
+      });
+
+      // Enter key support for custom topic input
+      customTopicInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          generateBtn.click();
+        }
+      });
+    });
+
+    // Initialize Chat Demo
+    function initChatDemo() {
+      const chatInput = document.getElementById('chat-input');
+      const sendButton = document.getElementById('send-button');
+      const chatMessages = document.querySelector('.chatbot-messages');
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'message typing hidden';
+      typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+      chatMessages.appendChild(typingIndicator);
+
+      // Add initial greeting
+      addMessage("Hi! I'm Kāna's AI assistant. How can I help you today?", 'bot');
+
+      function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        messageDiv.textContent = text;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function showTypingIndicator() {
+        typingIndicator.classList.remove('hidden');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function hideTypingIndicator() {
+        typingIndicator.classList.add('hidden');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      function getBotResponse(userMessage) {
+        const lowerMessage = userMessage.toLowerCase();
+        
+        // Check for greetings
+        if (lowerMessage.match(/^(hi|hello|hey|greetings)$/)) {
+          return demoChatResponses[lowerMessage];
+        }
+        
+        // Check for thanks
+        if (lowerMessage.match(/^(thanks|thank you)$/)) {
+          return demoChatResponses[lowerMessage];
+        }
+        
+        // Check for goodbye
+        if (lowerMessage.match(/^(bye|goodbye)$/)) {
+          return demoChatResponses[lowerMessage];
+        }
+        
+        // Check for service-related keywords
+        for (const [key, response] of Object.entries(demoChatResponses)) {
+          if (lowerMessage.includes(key)) {
+            return response;
+          }
+        }
+        
+        // Default response
+        return demoChatResponses.default;
+      }
+
+      function handleUserInput() {
+        const userMessage = chatInput.value.trim();
+        if (userMessage) {
+          addMessage(userMessage, 'user');
+          chatInput.value = '';
+          
+          showTypingIndicator();
+          
+          setTimeout(() => {
+            hideTypingIndicator();
+            const botResponse = getBotResponse(userMessage);
+            addMessage(botResponse, 'bot');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          }, 1500);
+        }
+      }
+
+      sendButton.addEventListener('click', handleUserInput);
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          handleUserInput();
+        }
+      });
+    }
+
+    // Initialize all components
+    document.addEventListener('DOMContentLoaded', function() {
+      initGridLines();
+      initScrollProgress();
+      initRevealAnimations();
+      initContactForm();
+      initChatDemo();
+    });
+
+    // Kāna AI Assistant Responses
+    const kanaAIResponses = {
+      "greetings": {
+        "hi": "Hello! I'm Kāna's AI assistant. How can I help you today?",
+        "hello": "Hi there! I'm here to help you learn about our services. What would you like to know?",
+        "hey": "Hey! Welcome to Kāna. I can tell you about our web design, app development, chatbot, e-commerce, or digital marketing services. What interests you?",
+        "greetings": "Greetings! I'm your AI assistant at Kāna. How may I assist you today?"
+      },
+      "portfolio": {
+        "portfolio": "I'll show you our portfolio section. We have a diverse collection of successful projects including responsive websites, mobile applications, and e-commerce platforms. Each project showcases our expertise in creating innovative digital solutions. Let me take you there...",
+        "work": "Our work demonstrates our commitment to excellence in digital solutions. From modern web designs to powerful applications, we've helped businesses transform their digital presence. I'll navigate you to our portfolio section...",
+        "projects": "We've completed numerous successful projects across various industries. Our portfolio includes case studies, client testimonials, and project highlights. Let me show you our work..."
+      },
+      "solutions": {
+        "solutions": "I'll take you to our solutions section. We offer comprehensive digital solutions including web design, app development, chatbot integration, e-commerce platforms, and digital marketing services. Each solution is tailored to meet specific business needs. Let me navigate you there...",
+        "services": "Our services are designed to help businesses thrive in the digital age. From custom web development to AI-powered chatbots, we provide end-to-end solutions. I'll show you our services section...",
+        "offerings": "We offer a wide range of digital solutions to help businesses grow. Let me take you to our solutions section where you can explore each offering in detail..."
+      },
+      "contact": {
+        "contact": "I'll take you to our contact section. You can reach us through multiple channels: phone at +91 9008747926, email, or our contact form. Our team typically responds within 24 hours. Let me navigate you there...",
+        "reach": "You can reach us through multiple channels: phone, email, or our contact form. Our team typically responds within 24 hours. I'll take you to our contact section...",
+        "support": "Our support team is available Monday through Friday, 9 AM to 6 PM. For urgent inquiries, you can call us directly at +91 9008747926. Let me show you our contact information..."
+      },
+      "courtesy": {
+        "thanks": "You're welcome! Is there anything else you'd like to know about our services?",
+        "thank you": "You're welcome! Feel free to ask if you have any other questions about our services.",
+        "bye": "Goodbye! If you need more information later, don't hesitate to ask. Have a great day!",
+        "goodbye": "Take care! Feel free to return if you have more questions about our services."
+      },
+      "default": "I'm here to help you learn about our services. Would you like to know about our web design, app development, chatbot, e-commerce, or digital marketing services?"
+    };
+
+    // Predefined Prompts
+    const predefinedPrompts = [
+      {
+        icon: "fa-briefcase",
+        text: "Our Work",
+        category: "portfolio",
+        keyword: "portfolio",
+        action: () => {
+          document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth' });
+        }
+      },
+      {
+        icon: "fa-cogs",
+        text: "Solutions",
+        category: "solutions",
+        keyword: "solutions",
+        action: () => {
+          document.getElementById('solutions').scrollIntoView({ behavior: 'smooth' });
+        }
+      },
+      {
+        icon: "fa-phone",
+        text: "Contact",
+        category: "contact",
+        keyword: "contact",
+        action: () => {
+          document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    ];
+
+    // Initialize Kāna AI Assistant
+    function initKanaAI() {
+      const kanaAIInput = document.getElementById('kana-ai-input');
+      const kanaAISend = document.getElementById('kana-ai-send');
+      const kanaAIMessages = document.querySelector('.kana-ai-messages');
+      const predefinedPromptsContainer = document.querySelector('.predefined-prompts');
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'message typing hidden';
+      typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+      kanaAIMessages.appendChild(typingIndicator);
+
+      // Add initial greeting
+      addMessage("Hi! I'm Kāna's AI assistant. How can I help you today?", 'bot');
+
+      // Create predefined prompts
+      predefinedPrompts.forEach(prompt => {
+        const promptButton = document.createElement('button');
+        promptButton.className = 'prompt-btn p-4 bg-dark/50 border border-neutral-700 rounded-lg text-left hover:border-accent transition-colors reveal-up';
+        promptButton.innerHTML = `
+          <i class="fas ${prompt.icon} text-accent mb-2"></i>
+          <h3 class="font-medium">${prompt.text}</h3>
+        `;
+        promptButton.addEventListener('click', () => {
+          handlePromptClick(prompt);
+        });
+        predefinedPromptsContainer.appendChild(promptButton);
+      });
+
+      function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        messageDiv.textContent = text;
+        kanaAIMessages.appendChild(messageDiv);
+        kanaAIMessages.scrollTop = kanaAIMessages.scrollHeight;
+      }
+
+      function showTypingIndicator() {
+        typingIndicator.classList.remove('hidden');
+        kanaAIMessages.scrollTop = kanaAIMessages.scrollHeight;
+      }
+
+      function hideTypingIndicator() {
+        typingIndicator.classList.add('hidden');
+        kanaAIMessages.scrollTop = kanaAIMessages.scrollHeight;
+      }
+
+      function getAIResponse(userMessage) {
+        const lowerMessage = userMessage.toLowerCase();
+        
+        // Check greetings
+        if (kanaAIResponses.greetings[lowerMessage]) {
+          return kanaAIResponses.greetings[lowerMessage];
+        }
+        
+        // Check courtesy
+        if (kanaAIResponses.courtesy[lowerMessage]) {
+          return kanaAIResponses.courtesy[lowerMessage];
+        }
+        
+        // Check other categories
+        for (const category in kanaAIResponses) {
+          if (category !== 'greetings' && category !== 'courtesy' && category !== 'default') {
+            for (const [key, response] of Object.entries(kanaAIResponses[category])) {
+              if (lowerMessage.includes(key)) {
+                return response;
+              }
+            }
+          }
+        }
+        
+        // Default response
+        return kanaAIResponses.default;
+      }
+
+      function handlePromptClick(prompt) {
+        const response = kanaAIResponses[prompt.category][prompt.keyword];
+        addMessage(prompt.text, 'user');
+        showTypingIndicator();
+        
+        setTimeout(() => {
+          hideTypingIndicator();
+          addMessage(response, 'bot');
+          kanaAIMessages.scrollTop = kanaAIMessages.scrollHeight;
+          
+          // Execute the navigation action after the response
+          setTimeout(() => {
+            prompt.action();
+          }, 500);
+        }, 1500);
+      }
+
+      function handleUserInput() {
+        const userMessage = kanaAIInput.value.trim();
+        if (userMessage) {
+          addMessage(userMessage, 'user');
+          kanaAIInput.value = '';
+          
+          showTypingIndicator();
+          
+          setTimeout(() => {
+            hideTypingIndicator();
+            const aiResponse = getAIResponse(userMessage);
+            addMessage(aiResponse, 'bot');
+            kanaAIMessages.scrollTop = kanaAIMessages.scrollHeight;
+          }, 1500);
+        }
+      }
+
+      kanaAISend.addEventListener('click', handleUserInput);
+      kanaAIInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          handleUserInput();
+        }
+      });
+    }
+
+    // Initialize all components
+    document.addEventListener('DOMContentLoaded', function() {
+      initGridLines();
+      initScrollProgress();
+      initRevealAnimations();
+      initContactForm();
+      initChatDemo();
+      initKanaAI();
+    });
+
+    // Show Kāna AI Assistant
+    function showKanaAI() {
+      const container = document.querySelector('.kana-ai-container');
+      container.style.display = 'flex';
+      container.style.opacity = '0';
+      setTimeout(() => {
+        container.style.opacity = '1';
+      }, 10);
+    }
+
+    // Close Kāna AI Assistant
+    function closeKanaAI() {
+      const container = document.querySelector('.kana-ai-container');
+      container.style.opacity = '0';
+      setTimeout(() => {
+        container.style.display = 'none';
+      }, 300);
+    }
+
+    // Initialize when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      initKanaAI();
+      // Hide the assistant initially
+      document.querySelector('.kana-ai-container').style.display = 'none';
     });
   </script>
 </body>
